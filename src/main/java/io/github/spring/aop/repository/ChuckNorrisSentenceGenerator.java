@@ -14,7 +14,7 @@ public record ChuckNorrisSentenceGenerator(Call.Factory callFactory, ObjectMappe
     @Override
     public String generate() {
         final var request = new Request.Builder()
-                .url("https://api.chucknorris.io/jokes/randomx2")
+                .url("https://api.chucknorris.io/jokes/random")
                 .get()
                 .build();
 
