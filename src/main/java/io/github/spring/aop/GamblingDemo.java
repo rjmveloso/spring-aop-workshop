@@ -1,6 +1,8 @@
 package io.github.spring.aop;
 
-import io.github.spring.aop.service.*;
+import io.github.spring.aop.layout.ConsoleGameLayout;
+import io.github.spring.aop.layout.GameLayout;
+import io.github.spring.aop.service.GameRuler;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,48 +15,16 @@ public class GamblingDemo implements CommandLineRunner {
         SpringApplication.run(GamblingDemo.class, args);
     }
 
-    private final ConsoleGame game;
+    private final GameLayout game;
 
     public GamblingDemo(AutowireCapableBeanFactory beanFactory) {
-        this.game = new ConsoleGame(beanFactory.getBean(GameRuler.class));
+        this.game = new ConsoleGameLayout(beanFactory.getBean(GameRuler.class));
     }
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Starting AopDemo application");
-
+        System.out.println("Starting GamblingDemo application");
         game.run();
     }
 
-    private static class ConsoleGame implements Runnable {
-        private final GameRuler ruler;
-
-        private ConsoleGame(GameRuler ruler) {
-            this.ruler = ruler;
-        }
-
-        @Override
-        public void run() {
-            System.out.println(ruler.rules());
-
-            try(InputReader reader = new ConsoleInputReader()) {
-                while (true) {
-                    int number = reader.read();
-                    String result = ruler.check(number);
-
-                    switch (result) {
-                        case "LOOSE" -> {
-                            System.out.println("LOOSER");
-                            return;
-                        }
-                        case "WIN" -> {
-                            System.out.println("WINNER");
-                            return;
-                        }
-                        default -> System.out.println(result);
-                    }
-                }
-            }
-        }
-    }
 }
